@@ -7,6 +7,10 @@ export const routes: Routes = [
     loadComponent: () => import('./gifs/pages/dashboard-page/dashboard-page.component')
   },
   {
+    path: 'trending',
+    loadComponent: () => import('./gifs/pages/trending-page/trending-page.component')
+  },
+  {
     path: '**',
     redirectTo: 'dashboard'
   }
