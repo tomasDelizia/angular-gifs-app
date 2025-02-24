@@ -1,3 +1,13 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: 'dashboard',
+    // Lazy loading de componentes
+    loadComponent: () => import('./gifs/pages/dashboard-page/dashboard-page.component')
+  },
+  {
+    path: '**',
+    redirectTo: 'dashboard'
+  }
+];
