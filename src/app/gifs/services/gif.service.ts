@@ -3,7 +3,7 @@ import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environments/environment';
 import { GiphyResponse } from '../interfaces/giphy.interfaces';
 import { GifMapper } from '../mapper/gif.mapper';
-import { map, tap } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { Gif } from '../interfaces/gif.interface';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class GifService {
     console.log('GifService creado');
   }
 
-  searchTrendingGifs() {
+  searchTrendingGifs(): Observable<Gif[]> {
     console.log('Searching trending gifs');
     return this.http
       .get<GiphyResponse>(`${environment.giphyApiUrl}/gifs/trending`, {
@@ -38,7 +38,7 @@ export class GifService {
       );
   }
 
-  searchGifs(query: string) {
+  searchGifs(query: string): Observable<Gif[]> {
     console.log('Searching gifs with query:', query);
     return (
       this.http
@@ -63,5 +63,9 @@ export class GifService {
           )
         )
     );
+  }
+
+  searchHistoryGifs(query: string): Gif[] {
+    return this.searchHistory()[query] ?? [];
   }
 }
