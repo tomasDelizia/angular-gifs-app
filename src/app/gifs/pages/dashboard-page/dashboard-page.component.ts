@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SideMenuComponent } from "../../components/side-menu/side-menu.component";
+import { SideMenuComponent } from '../../components/side-menu/side-menu.component';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -9,4 +9,4 @@ import { SideMenuComponent } from "../../components/side-menu/side-menu.componen
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 // Se usa el default para luego poder usar lazy loading
-export default class DashboardPageComponent { }
+export default class DashboardPageComponent {}
