@@ -6,7 +6,8 @@ export class GifMapper {
     return {
       id: giphyItem.id,
       title: giphyItem.title,
-      url: giphyItem.url,
+      url: giphyItem.images.original.url,
+      //url: giphyItem.url,
     };
   }
 
