@@ -1,8 +1,9 @@
 {
-    "angular-schematics.schematicsDefaultOptions": {
-        "angular-*": {
-            "externalTemplate": true,
-            "skipStyle": true
-        }
-    }
+  "editor.formatOnSave": true,
+  "angular-schematics.schematicsDefaultOptions": {
+      "angular-*": {
+          "externalTemplate": true,
+          "skipStyle": true
+      }
+  }
 }
