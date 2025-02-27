@@ -3,4 +3,7 @@ export const environment = {
   companyName: 'Gifs',
   companyName2: 'App',
   companySlogan: 'Maneja tus Gifs',
+
+  // API Keys
+  giphyApiKey: import.meta.env.NG_APP_GIPHY_API_KEY,
 };
