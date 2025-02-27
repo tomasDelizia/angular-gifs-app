@@ -4,6 +4,7 @@ import { environment } from '@environments/environment';
 import { GiphyResponse } from '../interfaces/giphy.interfaces';
 import { Gif } from '../interfaces/gif.interface';
 import { GifMapper } from '../mapper/gif.mapper';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,6 @@ export class GifService {
   trendingGifsLoading = signal(true);
 
   constructor() {
-    this.loadTrendingGifs();
     console.log('GifService creado');
   }
 
@@ -33,5 +33,25 @@ export class GifService {
         this.trendingGifsLoading.set(false);
         console.log({ gifs });
       });
+  }
+
+  searchGifs(query: string) {
+    console.log('Searching gifs with query:', query);
+    return (
+      this.http
+        .get<GiphyResponse>(`${environment.giphyApiUrl}/gifs/search`, {
+          params: {
+            q: query,
+            api_key: environment.giphyApiKey,
+            limit: 20,
+          },
+        })
+        // .pipe(map(({ data }) => GifMapper.mapGiphyItemsToGifArray(data))); // Haciendolo en una línea queda así
+        .pipe(
+          map(({ data }) => data),
+          map((items) => GifMapper.mapGiphyItemsToGifArray(items))
+        )
+    );
+    // TODO Historial
   }
 }
