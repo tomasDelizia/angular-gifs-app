@@ -11,6 +11,7 @@ import { Gif } from '../interfaces/gif.interface';
 })
 export class GifService {
   private SEARCH_HISTORY_KEY = 'searchHistory';
+  private PAGE_SIZE = 21;
   private http = inject(HttpClient);
 
   // Empleamos Records para almacenar un diccionario con el historial de búsqueda
@@ -37,13 +38,14 @@ export class GifService {
     console.log('GifService creado');
   }
 
-  searchTrendingGifs(): Observable<Gif[]> {
-    console.log('Searching trending gifs');
+  searchTrendingGifs(page: number = 0): Observable<Gif[]> {
+    console.log('Searching trending gifs page ', page);
     return this.http
       .get<GiphyResponse>(`${environment.giphyApiUrl}/gifs/trending`, {
         params: {
           api_key: environment.giphyApiKey,
-          limit: 21,
+          limit: this.PAGE_SIZE,
+          offset: this.PAGE_SIZE * page,
         },
       })
       .pipe(
