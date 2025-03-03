@@ -1,52 +1,35 @@
 import {
+  AfterViewInit,
   Component,
-  computed,
   ElementRef,
   inject,
-  signal,
   viewChild,
 } from '@angular/core';
-import { GifListComponent } from '../../components/gif-list/gif-list.component';
 import { GifService } from '../../services/gif.service';
-import { Gif } from '../../interfaces/gif.interface';
+import { ScrollStateService } from 'src/app/shared/services/scroll-state-service';
 
 @Component({
   selector: 'app-trending-page',
   templateUrl: './trending-page.component.html',
-  imports: [GifListComponent],
 })
-export default class TrendingPageComponent {
+export default class TrendingPageComponent implements AfterViewInit {
   gifService = inject(GifService);
-
-  trendingGifs = signal<Gif[]>([]);
-  trendingGifsLoading = signal(false);
-  private trendingGifsPage = signal(-1);
-  trendingGifsGroup = computed<Gif[][]>(() => {
-    // Creamos una matriz de tres 3 columnas
-    const groups = [];
-    for (let i = 0; i < this.trendingGifs().length; i += 3) {
-      groups.push(this.trendingGifs().slice(i, i + 3));
-    }
-    return groups;
-  });
+  scrollStateService = inject(ScrollStateService);
 
   // Señal que hace referencia al elemento HTML Div
   scrollDivRef = viewChild<ElementRef<HTMLDivElement>>('groupDiv');
 
-  constructor() {
-    this.searchTrendingGifs();
-  }
-
-  searchTrendingGifs() {
-    if (this.trendingGifsLoading()) return;
-    this.trendingGifsLoading.set(true);
-    this.trendingGifsPage.update((previous) => previous + 1);
-    this.gifService
-      .searchTrendingGifs(this.trendingGifsPage())
-      .subscribe((response) => {
-        this.trendingGifs.update((previous) => [...previous, ...response]);
-        this.trendingGifsLoading.set(false);
-      });
+  // Se ejecuta tan pronto la vista es inicializada o reconstruida
+  ngAfterViewInit(): void {
+    // Restauramos la posición del scroll
+    const scrollDiv = this.scrollDivRef()?.nativeElement;
+    if (!scrollDiv) return;
+    scrollDiv.scrollTop = this.scrollStateService.trendingScrollState();
+    console.log(
+      'Valor del scroll guardado es ',
+      this.scrollStateService.trendingScrollState()
+    );
+    console.log('Restauramos el scroll top a ', scrollDiv.scrollTop);
   }
 
   onScroll(event: Event) {
@@ -62,8 +45,10 @@ export default class TrendingPageComponent {
     const scrollTotal = scrollTop + clientHeight;
     // Disparar una nueva búsqueda cuando el total del scroll supere el 76% del tamaño total del contenido
     const isNearBottom = scrollTotal / scrollHeight >= 0.76;
+    // Guardamos el valor de la posición actual del scroll
+    this.scrollStateService.trendingScrollState.set(scrollTop);
     if (isNearBottom) {
-      this.searchTrendingGifs();
+      this.gifService.searchTrendingGifs();
     }
   }
 }
