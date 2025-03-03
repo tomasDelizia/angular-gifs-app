@@ -43,7 +43,7 @@ export class GifService {
       .get<GiphyResponse>(`${environment.giphyApiUrl}/gifs/trending`, {
         params: {
           api_key: environment.giphyApiKey,
-          limit: 20,
+          limit: 21,
         },
       })
       .pipe(
