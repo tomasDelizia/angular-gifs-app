@@ -33,6 +33,7 @@ export default class TrendingPageComponent implements AfterViewInit {
   }
 
   onScroll(event: Event) {
+    // debugger // Esta palabra reservada abre el debug console del navegador
     const scrollDiv = this.scrollDivRef()?.nativeElement;
     if (!scrollDiv) return;
     // La cantidad de pixeles que se mueve el usuario desde arriba de la pantalla
